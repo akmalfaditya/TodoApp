@@ -1,6 +1,3 @@
-import React from 'react';
-import { Users, ShieldCheck } from 'lucide-react';
-import { Card } from '../../../components/ui/Card';
 import React, { useState, useMemo } from 'react';
 import { Users, Search, RefreshCw, AlertCircle, ShieldAlert } from 'lucide-react';
 import axios from 'axios';
@@ -103,7 +100,6 @@ export const AdminUsersPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
     <div className="max-w-6xl mx-auto space-y-6">
       {/* Toast Notification */}
       {toast && (
@@ -122,8 +118,7 @@ export const AdminUsersPage: React.FC = () => {
             Manajemen Pengguna & Role
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            Area khusus administrator sistem TodoApp.
-            Kelola hak akses, peranan (role), dan status pengguna TodoApp
+            Area khusus administrator sistem TodoApp. Kelola hak akses, peranan (role), dan status pengguna TodoApp.
           </p>
         </div>
 
@@ -135,9 +130,6 @@ export const AdminUsersPage: React.FC = () => {
         )}
       </div>
 
-      <Card className="text-center py-12 space-y-4 border-purple-100">
-        <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto">
-          <ShieldCheck className="w-6 h-6" />
       {/* Search Input Bar */}
       <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between gap-4">
         <div className="relative flex-1 max-w-md">
@@ -150,11 +142,6 @@ export const AdminUsersPage: React.FC = () => {
             className="w-full pl-9 pr-3 py-1.5 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
           />
         </div>
-        <div className="space-y-1">
-          <h3 className="text-lg font-semibold text-gray-900">Area Admin (Spec 13)</h3>
-          <p className="text-sm text-gray-500 max-w-md mx-auto">
-            Fitur tabel pengguna, ubah role (User ↔ Admin), toggle kunci akun (lockout), dan hapus akun pengguna akan dibangun pada Spec 13.
-          </p>
 
         <Button
           variant="secondary"
@@ -179,7 +166,6 @@ export const AdminUsersPage: React.FC = () => {
             />
           ))}
         </div>
-      </Card>
       )}
 
       {/* Error State */}
