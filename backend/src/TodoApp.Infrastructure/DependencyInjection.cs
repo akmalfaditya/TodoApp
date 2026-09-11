@@ -18,6 +18,8 @@ public static class DependencyInjection
 
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped<ITodoRepository, TodoRepository>();
+        services.AddScoped<TodoApp.Application.Interfaces.IJwtTokenService, Services.JwtTokenService>();
+        services.AddScoped<TodoApp.Application.Features.Auth.IAuthService, Services.AuthService>();
 
         return services;
     }

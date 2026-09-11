@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TodoApp.Application.Identity;
 using TodoApp.Domain.Entities;
-using TodoApp.Infrastructure.Identity;
 
 namespace TodoApp.Infrastructure.Persistence;
 
