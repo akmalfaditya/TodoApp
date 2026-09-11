@@ -36,3 +36,8 @@ appsettings.Development.json
 .env.*
 !.env.example
 
+## SQLite databases
+*.db
+*.db-shm
+*.db-wal
+
