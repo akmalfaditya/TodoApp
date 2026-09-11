@@ -1,5 +1,6 @@
 using AutoMapper;
 using FluentValidation;
+using Microsoft.Extensions.Logging;
 using TodoApp.Application.Common;
 using TodoApp.Application.Common.Models;
 using TodoApp.Application.Features.Todos.Dtos;
@@ -14,17 +15,20 @@ public class TodoService : BaseService, ITodoService
     private readonly IMapper _mapper;
     private readonly IValidator<CreateTodoRequestDto> _createValidator;
     private readonly IValidator<UpdateTodoRequestDto> _updateValidator;
+    private readonly ILogger<TodoService> _logger;
 
     public TodoService(
         ITodoRepository todoRepository,
         IMapper mapper,
         IValidator<CreateTodoRequestDto> createValidator,
-        IValidator<UpdateTodoRequestDto> updateValidator)
+        IValidator<UpdateTodoRequestDto> updateValidator,
+        ILogger<TodoService> logger)
     {
         _todoRepository = todoRepository;
         _mapper = mapper;
         _createValidator = createValidator;
         _updateValidator = updateValidator;
+        _logger = logger;
     }
 
     public async Task<ServiceResult<List<TodoResponseDto>>> GetAllForUserAsync(string userId, bool isAdmin)
@@ -47,6 +51,7 @@ public class TodoService : BaseService, ITodoService
 
         if (!isAdmin && item.OwnerId != userId)
         {
+            _logger.LogWarning("User {UserId} attempted unauthorized access to Todo {TodoId}", userId, id);
             return ServiceResult<TodoResponseDto>.Forbidden("Anda tidak memiliki akses ke todo ini.");
         }
 
@@ -70,6 +75,8 @@ public class TodoService : BaseService, ITodoService
         await _todoRepository.AddAsync(item);
         await _todoRepository.SaveChangesAsync();
 
+        _logger.LogInformation("Todo {TodoId} created successfully for user {UserId}", item.Id, userId);
+
         var responseDto = _mapper.Map<TodoResponseDto>(item);
         return ServiceResult<TodoResponseDto>.Success(responseDto);
     }
@@ -84,6 +91,7 @@ public class TodoService : BaseService, ITodoService
 
         if (!isAdmin && item.OwnerId != userId)
         {
+            _logger.LogWarning("User {UserId} attempted unauthorized update on Todo {TodoId}", userId, id);
             return ServiceResult<TodoResponseDto>.Forbidden("Anda tidak memiliki akses untuk mengubah todo ini.");
         }
 
@@ -99,6 +107,8 @@ public class TodoService : BaseService, ITodoService
         _todoRepository.Update(item);
         await _todoRepository.SaveChangesAsync();
 
+        _logger.LogInformation("Todo {TodoId} updated successfully by user {UserId}", id, userId);
+
         var responseDto = _mapper.Map<TodoResponseDto>(item);
         return ServiceResult<TodoResponseDto>.Success(responseDto);
     }
@@ -113,11 +123,14 @@ public class TodoService : BaseService, ITodoService
 
         if (!isAdmin && item.OwnerId != userId)
         {
+            _logger.LogWarning("User {UserId} attempted unauthorized deletion on Todo {TodoId}", userId, id);
             return ServiceResult.Forbidden("Anda tidak memiliki akses untuk menghapus todo ini.");
         }
 
         _todoRepository.Delete(item);
         await _todoRepository.SaveChangesAsync();
+
+        _logger.LogInformation("Todo {TodoId} deleted successfully by user {UserId}", id, userId);
 
         return ServiceResult.Success();
     }
@@ -132,6 +145,7 @@ public class TodoService : BaseService, ITodoService
 
         if (!isAdmin && item.OwnerId != userId)
         {
+            _logger.LogWarning("User {UserId} attempted unauthorized toggle complete on Todo {TodoId}", userId, id);
             return ServiceResult<TodoResponseDto>.Forbidden("Anda tidak memiliki akses ke todo ini.");
         }
 
@@ -141,8 +155,9 @@ public class TodoService : BaseService, ITodoService
         _todoRepository.Update(item);
         await _todoRepository.SaveChangesAsync();
 
+        _logger.LogInformation("Todo {TodoId} completion toggled to {IsCompleted} by user {UserId}", id, item.IsCompleted, userId);
+
         var responseDto = _mapper.Map<TodoResponseDto>(item);
         return ServiceResult<TodoResponseDto>.Success(responseDto);
     }
 }
-
