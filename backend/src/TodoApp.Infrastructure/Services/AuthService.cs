@@ -64,6 +64,7 @@ public class AuthService : IAuthService
 
         return ServiceResult<AuthResponseDto>.Success(new AuthResponseDto
         {
+            Id = user.Id,
             Token = token,
             ExpiresAtUtc = expiresAt,
             Email = user.Email ?? string.Empty,
@@ -80,12 +81,18 @@ public class AuthService : IAuthService
             return ServiceResult<AuthResponseDto>.Failure("Email atau password salah");
         }
 
+        if (await _userManager.IsLockedOutAsync(user))
+        {
+            return ServiceResult<AuthResponseDto>.Failure("Akun Anda telah dikunci oleh administrator.", ServiceErrorType.Forbidden);
+        }
+
         var roles = await _userManager.GetRolesAsync(user);
         var token = _jwtTokenService.GenerateToken(user, roles);
         var expiresAt = _jwtTokenService.GetTokenExpiryUtc();
 
         return ServiceResult<AuthResponseDto>.Success(new AuthResponseDto
         {
+            Id = user.Id,
             Token = token,
             ExpiresAtUtc = expiresAt,
             Email = user.Email ?? string.Empty,

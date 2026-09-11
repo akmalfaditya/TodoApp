@@ -1,12 +1,12 @@
-namespace TodoApp.Application.Features.Auth.Dtos;
+namespace TodoApp.Application.Features.Admin.Dtos;
 
-public class AuthResponseDto
+public class UserSummaryDto
 {
     public string Id { get; set; } = string.Empty;
-    public string Token { get; set; } = string.Empty;
-    public DateTime ExpiresAtUtc { get; set; }
     public string Email { get; set; } = string.Empty;
     public string FullName { get; set; } = string.Empty;
     public List<string> Roles { get; set; } = new();
+    public bool IsLocked { get; set; }
+    public DateTime CreatedAt { get; set; }
 }
 
