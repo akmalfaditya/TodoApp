@@ -1,8 +1,19 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { routes } from '../AppRouter';
 import { useAuthStore } from '../../stores/authStore';
+
+const renderWithClient = (ui: React.ReactElement) => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+      mutations: { retry: false },
+    },
+  });
+  return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>);
+};
 
 describe('App Routing & Route Protection', () => {
   beforeEach(() => {
@@ -11,7 +22,7 @@ describe('App Routing & Route Protection', () => {
 
   it('redirects to /login when unauthenticated user visits /', async () => {
     const router = createMemoryRouter(routes, { initialEntries: ['/'] });
-    render(<RouterProvider router={router} />);
+    renderWithClient(<RouterProvider router={router} />);
 
     expect(await screen.findByText('Masuk ke Akun')).toBeDefined();
     expect(screen.queryByText('Daftar Tugas (Todos)')).toBeNull();
@@ -19,7 +30,7 @@ describe('App Routing & Route Protection', () => {
 
   it('redirects to /login when unauthenticated user visits /admin/users', async () => {
     const router = createMemoryRouter(routes, { initialEntries: ['/admin/users'] });
-    render(<RouterProvider router={router} />);
+    renderWithClient(<RouterProvider router={router} />);
 
     expect(await screen.findByText('Masuk ke Akun')).toBeDefined();
     expect(screen.queryByText('Manajemen Pengguna & Role')).toBeNull();
@@ -34,11 +45,11 @@ describe('App Routing & Route Protection', () => {
     });
 
     const router = createMemoryRouter(routes, { initialEntries: ['/'] });
-    render(<RouterProvider router={router} />);
+    renderWithClient(<RouterProvider router={router} />);
 
     expect(await screen.findByText('Daftar Tugas (Todos)')).toBeDefined();
-    expect(screen.getByText('John Doe')).toBeDefined();
-    expect(screen.getByText('Todos')).toBeDefined();
+    expect(screen.getAllByText('John Doe').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Todos').length).toBeGreaterThan(0);
     // "Kelola User" should NOT be visible to normal User
     expect(screen.queryByText('Kelola User')).toBeNull();
   });
@@ -52,7 +63,7 @@ describe('App Routing & Route Protection', () => {
     });
 
     const router = createMemoryRouter(routes, { initialEntries: ['/admin/users'] });
-    render(<RouterProvider router={router} />);
+    renderWithClient(<RouterProvider router={router} />);
 
     // Redirects to / which renders TodosPage
     expect(await screen.findByText('Daftar Tugas (Todos)')).toBeDefined();
@@ -68,7 +79,7 @@ describe('App Routing & Route Protection', () => {
     });
 
     const router = createMemoryRouter(routes, { initialEntries: ['/admin/users'] });
-    render(<RouterProvider router={router} />);
+    renderWithClient(<RouterProvider router={router} />);
 
     expect(await screen.findByText('Manajemen Pengguna & Role')).toBeDefined();
     // "Kelola User" should be visible in navbar
@@ -77,10 +88,9 @@ describe('App Routing & Route Protection', () => {
 
   it('renders NotFoundPage when visiting an unmapped route', async () => {
     const router = createMemoryRouter(routes, { initialEntries: ['/non-existent-page-xyz'] });
-    render(<RouterProvider router={router} />);
+    renderWithClient(<RouterProvider router={router} />);
 
     expect(await screen.findByText('404')).toBeDefined();
     expect(screen.getByText('Halaman Tidak Ditemukan')).toBeDefined();
   });
 });
-

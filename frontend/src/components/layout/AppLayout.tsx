@@ -8,10 +8,10 @@ export const AppLayout: React.FC = () => {
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
   const isAdmin = useAuthStore((state) => state.isAdmin());
-  const clearAuth = useAuthStore((state) => state.clearAuth);
+  const logout = useAuthStore((state) => state.logout);
 
   const handleLogout = () => {
-    clearAuth();
+    logout();
     navigate('/login', { replace: true });
   };
 

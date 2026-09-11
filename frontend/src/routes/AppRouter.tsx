@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, type RouteObject } from 'react-router-dom';
 import { AuthLayout } from '../components/layout/AuthLayout';
 import { AppLayout } from '../components/layout/AppLayout';
 import { ProtectedRoute } from './ProtectedRoute';
@@ -8,7 +8,7 @@ import { TodosPage } from '../features/todos/pages/TodosPage';
 import { AdminUsersPage } from '../features/admin/pages/AdminUsersPage';
 import { NotFoundPage } from './NotFoundPage';
 
-export const appRouter = createBrowserRouter([
+export const routes: RouteObject[] = [
   // Public Auth Routes
   {
     element: <AuthLayout />,
@@ -52,7 +52,8 @@ export const appRouter = createBrowserRouter([
     path: '*',
     element: <NotFoundPage />,
   },
-]);
+];
+
+export const appRouter = createBrowserRouter(routes);
 
 export default appRouter;
-
