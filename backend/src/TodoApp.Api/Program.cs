@@ -2,6 +2,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Mvc;
+using TodoApp.Application.Common.Extensions;
 using TodoApp.Application.Identity;
 using TodoApp.Infrastructure;
 using TodoApp.Infrastructure.Persistence;
@@ -10,7 +12,13 @@ using TodoApp.Infrastructure.Persistence.Seed;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructure(builder.Configuration);
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 
 // Configure Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>

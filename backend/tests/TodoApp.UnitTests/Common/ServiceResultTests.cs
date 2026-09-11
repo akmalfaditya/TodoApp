@@ -13,17 +13,55 @@ public class ServiceResultTests
 
         Assert.True(result.IsSuccess);
         Assert.Equal("test-data", result.Data);
-        Assert.Null(result.Error);
+        Assert.Null(result.ErrorMessage);
+        Assert.Equal(ServiceErrorType.None, result.ErrorType);
+        Assert.Empty(result.ValidationErrors);
     }
 
     [Fact]
-    public void ServiceResult_Failure_ShouldSetError()
+    public void ServiceResult_NotFound_ShouldSetNotFoundTypeAndMessage()
     {
-        var result = ServiceResult<string>.Failure("Invalid credentials");
+        var result = ServiceResult<string>.NotFound("Item not found");
 
         Assert.False(result.IsSuccess);
         Assert.Null(result.Data);
-        Assert.Equal("Invalid credentials", result.Error);
+        Assert.Equal("Item not found", result.ErrorMessage);
+        Assert.Equal(ServiceErrorType.NotFound, result.ErrorType);
+    }
+
+    [Fact]
+    public void ServiceResult_Forbidden_ShouldSetForbiddenType()
+    {
+        var result = ServiceResult<string>.Forbidden("Access denied");
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal("Access denied", result.ErrorMessage);
+        Assert.Equal(ServiceErrorType.Forbidden, result.ErrorType);
+    }
+
+    [Fact]
+    public void ServiceResult_ValidationFailure_ShouldSetErrorsAndValidationType()
+    {
+        var errors = new List<string> { "Title is required", "Priority is invalid" };
+        var result = ServiceResult<string>.ValidationFailure(errors);
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal(ServiceErrorType.Validation, result.ErrorType);
+        Assert.Equal(2, result.ValidationErrors.Count);
+        Assert.Contains("Title is required", result.ValidationErrors);
+    }
+
+    [Fact]
+    public void NonGenericServiceResult_ShouldWorkCorrectly()
+    {
+        var success = ServiceResult.Success();
+        Assert.True(success.IsSuccess);
+        Assert.Equal(ServiceErrorType.None, success.ErrorType);
+
+        var failure = ServiceResult.Failure("Failed operation", ServiceErrorType.BadRequest);
+        Assert.False(failure.IsSuccess);
+        Assert.Equal("Failed operation", failure.ErrorMessage);
+        Assert.Equal(ServiceErrorType.BadRequest, failure.ErrorType);
     }
 
     [Fact]
@@ -42,4 +80,3 @@ public class ServiceResultTests
         Assert.Equal("john@example.com", user.Email);
     }
 }
-
