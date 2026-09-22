@@ -8,24 +8,17 @@ using TodoApp.Application.Interfaces;
 
 namespace TodoApp.Infrastructure.Services;
 
-public class JwtTokenService : IJwtTokenService
+public class JwtTokenService(IConfiguration configuration) : IJwtTokenService
 {
-    private readonly IConfiguration _configuration;
-
-    public JwtTokenService(IConfiguration configuration)
-    {
-        _configuration = configuration;
-    }
-
     public DateTime GetTokenExpiryUtc()
     {
-        var expiryMinutes = Convert.ToDouble(_configuration["Jwt:ExpiryMinutes"] ?? "60");
+        var expiryMinutes = Convert.ToDouble(configuration["Jwt:ExpiryMinutes"] ?? "60");
         return DateTime.UtcNow.AddMinutes(expiryMinutes);
     }
 
     public string GenerateToken(ApplicationUser user, IList<string> roles)
     {
-        var jwtSettings = _configuration.GetSection("Jwt");
+        var jwtSettings = configuration.GetSection("Jwt");
         var secretKey = jwtSettings["Key"] ?? throw new InvalidOperationException("JWT Key is not configured.");
         var issuer = jwtSettings["Issuer"];
         var audience = jwtSettings["Audience"];
@@ -62,4 +55,3 @@ public class JwtTokenService : IJwtTokenService
         return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
     }
 }
-

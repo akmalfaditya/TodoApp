@@ -11,9 +11,17 @@ public class TodoMappingProfile : Profile
         CreateMap<TodoItem, TodoResponseDto>()
             .ForMember(dest => dest.Priority, opt => opt.MapFrom(src => src.Priority.ToString()));
 
-        CreateMap<CreateTodoRequestDto, TodoItem>();
+        CreateMap<CreateTodoRequestDto, TodoItem>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.OwnerId, opt => opt.Ignore())
+            .ForMember(dest => dest.IsCompleted, opt => opt.Ignore())
+            .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
 
-        CreateMap<UpdateTodoRequestDto, TodoItem>();
+        CreateMap<UpdateTodoRequestDto, TodoItem>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.OwnerId, opt => opt.Ignore())
+            .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
     }
 }
-

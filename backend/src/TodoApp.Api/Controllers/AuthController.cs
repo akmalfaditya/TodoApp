@@ -8,26 +8,19 @@ namespace TodoApp.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController : ApiControllerBase
+public class AuthController(IAuthService authService) : ApiControllerBase
 {
-    private readonly IAuthService _authService;
-
-    public AuthController(IAuthService authService)
-    {
-        _authService = authService;
-    }
-
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequestDto dto)
     {
-        var result = await _authService.RegisterAsync(dto);
+        var result = await authService.RegisterAsync(dto);
         return HandleResult(result, StatusCodes.Status201Created);
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto dto)
     {
-        var result = await _authService.LoginAsync(dto);
+        var result = await authService.LoginAsync(dto);
         return HandleResult(result);
     }
 
@@ -61,4 +54,3 @@ public class AuthController : ApiControllerBase
         });
     }
 }
-

@@ -9,15 +9,8 @@ namespace TodoApp.Api.Controllers;
 
 [Authorize]
 [Route("api/[controller]")]
-public class TodosController : ApiControllerBase
+public class TodosController(ITodoService todoService) : ApiControllerBase
 {
-    private readonly ITodoService _todoService;
-
-    public TodosController(ITodoService todoService)
-    {
-        _todoService = todoService;
-    }
-
     private string CurrentUserId => User.FindFirstValue(ClaimTypes.NameIdentifier)
                                     ?? User.FindFirst("sub")?.Value
                                     ?? string.Empty;
@@ -27,43 +20,42 @@ public class TodosController : ApiControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var result = await _todoService.GetAllForUserAsync(CurrentUserId, IsAdmin);
+        var result = await todoService.GetAllForUserAsync(CurrentUserId, IsAdmin);
         return HandleResult(result);
     }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
-        var result = await _todoService.GetByIdAsync(id, CurrentUserId, IsAdmin);
+        var result = await todoService.GetByIdAsync(id, CurrentUserId, IsAdmin);
         return HandleResult(result);
     }
 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateTodoRequestDto dto)
     {
-        var result = await _todoService.CreateAsync(dto, CurrentUserId);
+        var result = await todoService.CreateAsync(dto, CurrentUserId);
         return HandleResult(result, StatusCodes.Status201Created);
     }
 
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateTodoRequestDto dto)
     {
-        var result = await _todoService.UpdateAsync(id, dto, CurrentUserId, IsAdmin);
+        var result = await todoService.UpdateAsync(id, dto, CurrentUserId, IsAdmin);
         return HandleResult(result);
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
-        var result = await _todoService.DeleteAsync(id, CurrentUserId, IsAdmin);
+        var result = await todoService.DeleteAsync(id, CurrentUserId, IsAdmin);
         return HandleResult(result);
     }
 
     [HttpPatch("{id:guid}/complete")]
     public async Task<IActionResult> ToggleComplete([FromRoute] Guid id)
     {
-        var result = await _todoService.ToggleCompleteAsync(id, CurrentUserId, IsAdmin);
+        var result = await todoService.ToggleCompleteAsync(id, CurrentUserId, IsAdmin);
         return HandleResult(result);
     }
 }
-

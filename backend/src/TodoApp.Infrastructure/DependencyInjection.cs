@@ -1,9 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TodoApp.Domain.Interfaces;
+using TodoApp.Application.Common.Interfaces;
 using TodoApp.Infrastructure.Persistence;
-using TodoApp.Infrastructure.Persistence.Repositories;
 
 namespace TodoApp.Infrastructure;
 
@@ -16,8 +15,7 @@ public static class DependencyInjection
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlite(connectionString));
 
-        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-        services.AddScoped<ITodoRepository, TodoRepository>();
+        services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
         services.AddScoped<TodoApp.Application.Interfaces.IJwtTokenService, Services.JwtTokenService>();
         services.AddScoped<TodoApp.Application.Features.Auth.IAuthService, Services.AuthService>();
         services.AddScoped<TodoApp.Application.Features.Admin.IAdminUserService, Services.AdminUserService>();
@@ -25,4 +23,3 @@ public static class DependencyInjection
         return services;
     }
 }
-

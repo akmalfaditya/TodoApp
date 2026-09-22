@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TodoApp.Application.Common.Interfaces;
 using TodoApp.Application.Identity;
 using TodoApp.Domain.Entities;
 
 namespace TodoApp.Infrastructure.Persistence;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
@@ -42,4 +43,3 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         return base.SaveChangesAsync(cancellationToken);
     }
 }
-
