@@ -1,0 +1,68 @@
+{
+  "last_full_scan_commit": "79404a7dd058805629bf74f7d1c0d517fd578b91",
+  "last_full_scan_at": "2026-09-22T03:15:00Z",
+  "files": {
+    "codebase-map.md": {
+      "last_updated_commit": "79404a7dd058805629bf74f7d1c0d517fd578b91",
+      "last_updated_at": "2026-09-22T03:15:00Z"
+    },
+    "deep-dive/01-tech-stack.md": {
+      "last_updated_commit": "79404a7dd058805629bf74f7d1c0d517fd578b91",
+      "last_updated_at": "2026-09-22T03:15:00Z"
+    },
+    "deep-dive/02-architecture.md": {
+      "last_updated_commit": "79404a7dd058805629bf74f7d1c0d517fd578b91",
+      "last_updated_at": "2026-09-22T03:15:00Z"
+    },
+    "deep-dive/03-directory-structure.md": {
+      "last_updated_commit": "79404a7dd058805629bf74f7d1c0d517fd578b91",
+      "last_updated_at": "2026-09-22T03:15:00Z"
+    },
+    "deep-dive/04-data-model.md": {
+      "last_updated_commit": "79404a7dd058805629bf74f7d1c0d517fd578b91",
+      "last_updated_at": "2026-09-22T03:15:00Z"
+    },
+    "deep-dive/05-api-contracts.md": {
+      "last_updated_commit": "79404a7dd058805629bf74f7d1c0d517fd578b91",
+      "last_updated_at": "2026-09-22T03:15:00Z"
+    },
+    "deep-dive/06-frontend-inventory.md": {
+      "last_updated_commit": "79404a7dd058805629bf74f7d1c0d517fd578b91",
+      "last_updated_at": "2026-09-22T03:15:00Z"
+    },
+    "deep-dive/07-conventions.md": {
+      "last_updated_commit": "79404a7dd058805629bf74f7d1c0d517fd578b91",
+      "last_updated_at": "2026-09-22T03:15:00Z"
+    },
+    "deep-dive/08-business-rules.md": {
+      "last_updated_commit": "79404a7dd058805629bf74f7d1c0d517fd578b91",
+      "last_updated_at": "2026-09-22T03:15:00Z"
+    },
+    "deep-dive/09-test-coverage-map.md": {
+      "last_updated_commit": "79404a7dd058805629bf74f7d1c0d517fd578b91",
+      "last_updated_at": "2026-09-22T03:15:00Z"
+    },
+    "deep-dive/10-config-and-environments.md": {
+      "last_updated_commit": "79404a7dd058805629bf74f7d1c0d517fd578b91",
+      "last_updated_at": "2026-09-22T03:15:00Z"
+    },
+    "deep-dive/11-technical-debt-register.md": {
+      "last_updated_commit": "79404a7dd058805629bf74f7d1c0d517fd578b91",
+      "last_updated_at": "2026-09-22T03:15:00Z"
+    },
+    "deep-dive/12-glossary.md": {
+      "last_updated_commit": "79404a7dd058805629bf74f7d1c0d517fd578b91",
+      "last_updated_at": "2026-09-22T03:15:00Z"
+    }
+  },
+  "subsystems": {},
+  "key_manifest_hashes": {
+    "frontend/package.json": "507BAE979262F2356DFF7BF93FE17F4D03FF54C7C094E7CD40187643FF34F179",
+    "backend/src/TodoApp.Domain/TodoApp.Domain.csproj": "E151F959964EB450A5B86B72765E3F9C505645FA9516EAE485743D2B43911C8E",
+    "backend/src/TodoApp.Application/TodoApp.Application.csproj": "44DF9A4115C35FA80C98C98DE42BE1FF997C01B5139B2639D42C984C57F10074",
+    "backend/src/TodoApp.Infrastructure/TodoApp.Infrastructure.csproj": "49C193A9F19098D3D9DFC5BA95D14CFA64575B847ACE122C150E0982FEC40A7E",
+    "backend/src/TodoApp.Api/TodoApp.Api.csproj": "678F4D88A860116F64A86C59A9BD51111F0E3CF40B51743731B1E8961C35D702",
+    "backend/tests/TodoApp.UnitTests/TodoApp.UnitTests.csproj": "EBBFA9A89D2B5A41E2F8007511C437AD3ED4A7A971AE0B75BE88E2848423BE89"
+  }
+}
+

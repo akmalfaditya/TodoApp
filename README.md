@@ -571,6 +571,13 @@ Aplikasi ini sengaja menyederhanakan beberapa aspek infrastruktur guna memusatka
 
 ---
 
-## 9. Lisensi
+## 9. Codebase Knowledge Base & Machine Reference
+Repositori ini dilengkapi dengan basis pengetahuan mendalam (*Repository Knowledge Base*) yang dikelola melalui skill `knowledgecache` di folder `.agent/knowledge/`. Basis pengetahuan ini mencakup 12 dokumen referensi teknis yang detail untuk setiap aspek sistem:
+- **Pintu Masuk Utama**: [.agent/knowledge/codebase-map.md](.agent/knowledge/codebase-map.md)
+- **Modul Deep-Dive**: Dependencies ([01](.agent/knowledge/deep-dive/01-tech-stack.md)), Arsitektur & Request Lifecycle ([02](.agent/knowledge/deep-dive/02-architecture.md)), Directory Map ([03](.agent/knowledge/deep-dive/03-directory-structure.md)), Data Model & ER Diagram ([04](.agent/knowledge/deep-dive/04-data-model.md)), API Contracts ([05](.agent/knowledge/deep-dive/05-api-contracts.md)), Frontend Inventory ([06](.agent/knowledge/deep-dive/06-frontend-inventory.md)), Conventions ([07](.agent/knowledge/deep-dive/07-conventions.md)), Business Rules ([08](.agent/knowledge/deep-dive/08-business-rules.md)), Test Coverage Map ([09](.agent/knowledge/deep-dive/09-test-coverage-map.md)), Konfigurasi & Environment ([10](.agent/knowledge/deep-dive/10-config-and-environments.md)), Technical Debt Register ([11](.agent/knowledge/deep-dive/11-technical-debt-register.md)), dan Glossary ([12](.agent/knowledge/deep-dive/12-glossary.md)).
+
+---
+
+## 10. Lisensi
 Project ini dibuat untuk tujuan edukasi dan pembelajaran pola arsitektur Clean Architecture serta React modern. Bebas digunakan dan dimodifikasi untuk pengembangan pribadi.
 
