@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { LogIn, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import axios from 'axios';
 import { useLogin } from '../hooks/useAuth';
 import { Button } from '../../../components/ui/Button';
@@ -64,29 +64,28 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="text-center">
-        <h2 className="text-xl font-bold text-gray-900 flex items-center justify-center gap-2">
-          <LogIn className="w-5 h-5 text-blue-600" />
+    <div className="space-y-5">
+      <div className="text-center space-y-1">
+        <h2 className="text-lg font-semibold tracking-tight text-zinc-900">
           Masuk ke Akun
         </h2>
-        <p className="text-sm text-gray-500 mt-1">
-          Gunakan email dan password Anda untuk masuk
+        <p className="text-xs text-zinc-500">
+          Masukkan kredensial Anda untuk mengakses workspace
         </p>
       </div>
 
       {apiError && (
-        <div className="flex items-start gap-2.5 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
-          <AlertCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+        <div className="flex items-start gap-2.5 p-3 rounded-md bg-rose-50 border border-rose-200/80 text-rose-700 text-xs">
+          <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
           <span>{apiError}</span>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+      <form onSubmit={handleSubmit} className="space-y-3.5" noValidate>
         <Input
           label="Email"
           type="email"
-          placeholder="nama@email.com"
+          placeholder="nama@perusahaan.com"
           autoComplete="email"
           value={email}
           onChange={(e) => {
@@ -115,15 +114,18 @@ export const LoginPage: React.FC = () => {
           type="submit"
           variant="primary"
           isLoading={loginMutation.isPending}
-          className="w-full mt-2"
+          className="w-full mt-1.5"
         >
           Masuk
         </Button>
       </form>
 
-      <div className="text-center text-sm text-gray-500">
+      <div className="pt-2 text-center text-xs text-zinc-500 border-t border-zinc-100">
         Belum punya akun?{' '}
-        <Link to="/register" className="font-semibold text-blue-600 hover:text-blue-500 underline">
+        <Link
+          to="/register"
+          className="font-medium text-zinc-900 hover:text-zinc-700 underline underline-offset-2 transition-colors"
+        >
           Daftar di sini
         </Link>
       </div>

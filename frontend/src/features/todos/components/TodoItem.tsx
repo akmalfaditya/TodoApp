@@ -1,7 +1,8 @@
 import React from 'react';
-import { Calendar, Trash2, Edit2, Check, Clock, User } from 'lucide-react';
+import { Calendar, Trash2, Edit2, Check, Clock, User, AlertCircle } from 'lucide-react';
 import { useAuthStore } from '../../../stores/authStore';
 import { useToggleComplete, useDeleteTodo } from '../hooks/useTodos';
+import { Badge } from '../../../components/ui/Badge';
 import type { Todo, TodoPriority } from '../../../types/todo';
 
 export interface TodoItemProps {
@@ -9,10 +10,10 @@ export interface TodoItemProps {
   onEdit: (todo: Todo) => void;
 }
 
-const priorityBadgeStyles: Record<TodoPriority, string> = {
-  High: 'bg-red-100 text-red-700 border-red-200',
-  Medium: 'bg-amber-100 text-amber-700 border-amber-200',
-  Low: 'bg-gray-100 text-gray-700 border-gray-200',
+const priorityVariants: Record<TodoPriority, 'destructive' | 'warning' | 'secondary'> = {
+  High: 'destructive',
+  Medium: 'warning',
+  Low: 'secondary',
 };
 
 export const TodoItem: React.FC<TodoItemProps> = ({ todo, onEdit }) => {
@@ -45,10 +46,10 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onEdit }) => {
 
   return (
     <div
-      className={`p-4 rounded-xl border transition-all duration-200 shadow-sm hover:shadow-md bg-white ${
+      className={`p-3.5 rounded-lg border transition-all duration-150 shadow-xs group ${
         todo.isCompleted
-          ? 'border-gray-200 bg-gray-50/70 opacity-80'
-          : 'border-gray-200 hover:border-blue-300'
+          ? 'border-zinc-200/60 bg-zinc-50/60 text-zinc-400'
+          : 'border-zinc-200/90 hover:border-zinc-300 bg-white hover:shadow-subtle'
       }`}
     >
       <div className="flex items-start gap-3">
@@ -59,43 +60,43 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onEdit }) => {
           aria-checked={todo.isCompleted}
           onClick={handleToggle}
           disabled={toggleMutation.isPending}
-          className={`mt-0.5 w-5 h-5 rounded-md border flex items-center justify-center transition-colors shrink-0 ${
+          className={`mt-0.5 w-4.5 h-4.5 rounded-md border flex items-center justify-center transition-all shrink-0 cursor-pointer ${
             todo.isCompleted
-              ? 'bg-green-600 border-green-600 text-white shadow-sm'
-              : 'border-gray-300 hover:border-blue-500 bg-white'
+              ? 'bg-zinc-900 border-zinc-900 text-white shadow-xs'
+              : 'border-zinc-300 hover:border-zinc-600 bg-white'
           }`}
           title={todo.isCompleted ? 'Tandai belum selesai' : 'Tandai selesai'}
         >
-          {todo.isCompleted && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+          {todo.isCompleted && <Check className="w-3 h-3 stroke-[3]" />}
         </button>
 
         {/* Content Area */}
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-1">
             <h4
-              className={`text-base font-medium break-words ${
-                todo.isCompleted ? 'line-through text-gray-400' : 'text-gray-900'
+              className={`text-sm font-medium break-words leading-tight ${
+                todo.isCompleted ? 'line-through text-zinc-400' : 'text-zinc-900'
               }`}
             >
               {todo.title}
             </h4>
 
             {/* Priority Badge */}
-            <span
-              className={`text-xs px-2 py-0.5 rounded-full font-medium border ${
-                priorityBadgeStyles[todo.priority]
-              }`}
+            <Badge
+              size="sm"
+              variant={priorityVariants[todo.priority]}
+              showDot
             >
               {todo.priority}
-            </span>
+            </Badge>
 
             {/* Admin-only Owner Tag */}
             {isAdmin && todo.ownerId && (
               <span
-                className="inline-flex items-center gap-1 text-xs bg-purple-50 text-purple-700 px-2 py-0.5 rounded border border-purple-200"
+                className="inline-flex items-center gap-1 text-[11px] font-mono bg-purple-50 text-purple-700 px-1.5 py-0.5 rounded border border-purple-200/60"
                 title={`Pemilik Todo: ${todo.ownerId}`}
               >
-                <User className="w-3 h-3" />
+                <User className="w-2.5 h-2.5" />
                 Owner: {todo.ownerId.length > 8 ? `${todo.ownerId.substring(0, 8)}...` : todo.ownerId}
               </span>
             )}
@@ -104,8 +105,8 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onEdit }) => {
           {/* Description */}
           {todo.description && (
             <p
-              className={`text-sm mb-2 break-words ${
-                todo.isCompleted ? 'line-through text-gray-400' : 'text-gray-600'
+              className={`text-xs mt-0.5 mb-2 break-words leading-normal ${
+                todo.isCompleted ? 'line-through text-zinc-400' : 'text-zinc-600'
               }`}
             >
               {todo.description}
@@ -113,46 +114,50 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onEdit }) => {
           )}
 
           {/* Metadata Footer */}
-          <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500 pt-1">
+          <div className="flex flex-wrap items-center gap-3 text-[11px] text-zinc-400 pt-0.5">
             {formattedDueDate && (
               <span
                 className={`inline-flex items-center gap-1 font-medium ${
-                  isOverdue ? 'text-red-600 font-semibold' : 'text-gray-500'
+                  isOverdue ? 'text-rose-600 font-semibold' : 'text-zinc-500'
                 }`}
                 title={isOverdue ? 'Tugas telah melewati tenggat waktu!' : 'Tenggat Waktu'}
               >
-                <Calendar className="w-3.5 h-3.5" />
+                {isOverdue ? (
+                  <AlertCircle className="w-3 h-3 text-rose-600" />
+                ) : (
+                  <Calendar className="w-3 h-3 text-zinc-400" />
+                )}
                 {formattedDueDate}
                 {isOverdue && ' (Terlambat)'}
               </span>
             )}
 
-            <span className="inline-flex items-center gap-1 text-gray-400">
-              <Clock className="w-3.5 h-3.5" />
+            <span className="inline-flex items-center gap-1 text-zinc-400">
+              <Clock className="w-3 h-3 text-zinc-400" />
               Dibuat {new Date(todo.createdAt).toLocaleDateString('id-ID')}
             </span>
           </div>
         </div>
 
         {/* Actions (Edit & Delete) */}
-        <div className="flex items-center gap-1 shrink-0 ml-2">
+        <div className="flex items-center gap-1 shrink-0 opacity-80 group-hover:opacity-100 transition-opacity">
           <button
             type="button"
             onClick={() => onEdit(todo)}
-            className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+            className="p-1 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 rounded-md transition-colors cursor-pointer"
             title="Edit Tugas"
           >
-            <Edit2 className="w-4 h-4" />
+            <Edit2 className="w-3.5 h-3.5" />
           </button>
 
           <button
             type="button"
             onClick={handleDelete}
             disabled={deleteMutation.isPending}
-            className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            className="p-1 text-zinc-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors cursor-pointer"
             title="Hapus Tugas"
           >
-            <Trash2 className="w-4 h-4" />
+            <Trash2 className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
@@ -161,4 +166,3 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onEdit }) => {
 };
 
 export default TodoItem;
-

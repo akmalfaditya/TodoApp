@@ -3,24 +3,29 @@ import { clsx } from 'clsx';
 import { Spinner } from './Spinner';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'danger';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
   isLoading?: boolean;
 }
 
 const variantClasses = {
   primary:
-    'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500 disabled:bg-blue-400',
+    'bg-zinc-900 text-white hover:bg-zinc-800 active:bg-zinc-950 focus:ring-zinc-900 disabled:bg-zinc-300 disabled:text-zinc-500 shadow-xs border border-transparent',
   secondary:
-    'bg-gray-100 text-gray-800 hover:bg-gray-200 focus:ring-gray-400 disabled:bg-gray-50 disabled:text-gray-400 border border-gray-300',
+    'bg-white text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 focus:ring-zinc-400 disabled:bg-zinc-50 disabled:text-zinc-400 border border-zinc-200/90 shadow-xs',
+  outline:
+    'border border-zinc-200 text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 focus:ring-zinc-400 disabled:opacity-50',
+  ghost:
+    'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100/80 focus:ring-zinc-400 disabled:opacity-50 border border-transparent',
   danger:
-    'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 disabled:bg-red-400',
+    'bg-rose-600 text-white hover:bg-rose-700 active:bg-rose-800 focus:ring-rose-500 disabled:bg-rose-300 shadow-xs border border-transparent',
 };
 
 const sizeClasses = {
-  sm: 'px-3 py-1.5 text-sm',
-  md: 'px-4 py-2 text-base',
-  lg: 'px-6 py-3 text-lg',
+  xs: 'px-2 py-1 text-xs gap-1',
+  sm: 'px-3 py-1.5 text-xs gap-1.5',
+  md: 'px-3.5 py-2 text-sm gap-2',
+  lg: 'px-5 py-2.5 text-base gap-2',
 };
 
 export const Button: React.FC<ButtonProps> = ({
@@ -36,7 +41,7 @@ export const Button: React.FC<ButtonProps> = ({
     <button
       disabled={disabled || isLoading}
       className={clsx(
-        'inline-flex items-center justify-center font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed shadow-sm',
+        'inline-flex items-center justify-center font-medium rounded-md transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:cursor-not-allowed cursor-pointer select-none',
         variantClasses[variant],
         sizeClasses[size],
         className
@@ -44,7 +49,7 @@ export const Button: React.FC<ButtonProps> = ({
       {...props}
     >
       {isLoading && (
-        <Spinner size={size === 'lg' ? 'md' : 'sm'} className="mr-2" />
+        <Spinner size={size === 'lg' ? 'md' : 'sm'} className="mr-1.5" />
       )}
       {children}
     </button>
@@ -52,4 +57,3 @@ export const Button: React.FC<ButtonProps> = ({
 };
 
 export default Button;
-

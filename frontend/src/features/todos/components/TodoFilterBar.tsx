@@ -21,33 +21,33 @@ export const TodoFilterBar: React.FC = () => {
   ];
 
   return (
-    <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-        {/* Search input */}
-        <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+    <div className="bg-white p-3 rounded-lg border border-zinc-200/80 shadow-xs space-y-2.5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+        {/* Search input with enterprise styling */}
+        <div className="relative flex-1 max-w-sm">
+          <Search className="w-3.5 h-3.5 text-zinc-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
             placeholder="Cari tugas berdasarkan judul atau deskripsi..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
+            className="w-full pl-8 pr-2.5 py-1.5 text-xs text-zinc-900 rounded-md border border-zinc-200/80 focus:outline-none focus:ring-1 focus:ring-zinc-900 focus:border-zinc-900 placeholder-zinc-400 transition-colors"
           />
         </div>
 
         {/* Filter buttons & Sort controls */}
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2">
           {/* Status filter tabs */}
-          <div className="inline-flex rounded-lg border border-gray-200 bg-gray-50 p-0.5">
+          <div className="inline-flex rounded-md border border-zinc-200/80 bg-zinc-100/80 p-0.5">
             {filterOptions.map((opt) => (
               <button
                 key={opt.value}
                 type="button"
                 onClick={() => setFilter(opt.value)}
-                className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${
+                className={`px-2.5 py-1 text-xs font-medium rounded transition-all cursor-pointer ${
                   filter === opt.value
-                    ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-white text-zinc-900 shadow-xs font-semibold'
+                    : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/50'
                 }`}
               >
                 {opt.label}
@@ -56,12 +56,12 @@ export const TodoFilterBar: React.FC = () => {
           </div>
 
           {/* Sort dropdown */}
-          <div className="flex items-center gap-1.5">
-            <Filter className="w-3.5 h-3.5 text-gray-400" />
+          <div className="flex items-center gap-1">
+            <Filter className="w-3 h-3 text-zinc-400" />
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as TodoSortBy)}
-              className="text-xs font-medium border border-gray-300 rounded-lg px-2.5 py-1.5 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="text-xs font-medium border border-zinc-200/80 rounded-md px-2 py-1 bg-white text-zinc-800 focus:outline-none focus:ring-1 focus:ring-zinc-900 cursor-pointer"
             >
               <option value="createdAt">Waktu Dibuat</option>
               <option value="dueDate">Tenggat Waktu</option>
@@ -71,10 +71,10 @@ export const TodoFilterBar: React.FC = () => {
             <button
               type="button"
               onClick={toggleSortOrder}
-              className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded-lg border border-gray-300 transition-colors"
+              className="p-1 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 rounded-md border border-zinc-200/80 transition-colors cursor-pointer"
               title={`Urutan: ${sortOrder === 'asc' ? 'Menaik (Asc)' : 'Menurun (Desc)'}`}
             >
-              <ArrowUpDown className="w-3.5 h-3.5" />
+              <ArrowUpDown className="w-3 h-3" />
             </button>
           </div>
         </div>
@@ -84,4 +84,3 @@ export const TodoFilterBar: React.FC = () => {
 };
 
 export default TodoFilterBar;
-

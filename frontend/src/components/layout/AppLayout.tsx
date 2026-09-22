@@ -1,8 +1,9 @@
 import React from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { ListTodo, Users, LogOut, CheckSquare } from 'lucide-react';
+import { CheckSquare, ListTodo, Users, LogOut } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
 
 export const AppLayout: React.FC = () => {
   const navigate = useNavigate();
@@ -16,62 +17,82 @@ export const AppLayout: React.FC = () => {
   };
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `inline-flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+    `inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-150 ${
       isActive
-        ? 'bg-blue-50 text-blue-700 font-semibold'
-        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+        ? 'bg-zinc-100 text-zinc-900 shadow-xs border border-zinc-200/80'
+        : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100/60'
     }`;
 
+  const userInitials = user?.fullName
+    ? user.fullName
+        .split(' ')
+        .map((n) => n[0])
+        .slice(0, 2)
+        .join('')
+        .toUpperCase()
+    : user?.email?.[0]?.toUpperCase() || 'U';
+
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Top Navbar */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            {/* Logo & Navigation Links */}
-            <div className="flex items-center gap-8">
-              <NavLink to="/" className="flex items-center gap-2.5 text-blue-600 font-bold text-xl tracking-tight">
-                <div className="p-1.5 bg-blue-100 rounded-lg text-blue-600">
-                  <CheckSquare className="w-5 h-5" />
+    <div className="min-h-screen bg-[#fafafa] flex flex-col font-sans text-zinc-900 antialiased selection:bg-zinc-900 selection:text-white">
+      {/* Enterprise Top Navbar */}
+      <header className="bg-white border-b border-zinc-200/80 sticky top-0 z-30 shadow-xs">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-14 items-center">
+            {/* Brand Logo & Main Navigation */}
+            <div className="flex items-center gap-6">
+              <NavLink
+                to="/"
+                className="flex items-center gap-2.5 text-zinc-900 font-semibold tracking-tight group"
+              >
+                <div className="w-7 h-7 rounded-md bg-zinc-900 text-white flex items-center justify-center shadow-xs group-hover:bg-zinc-800 transition-colors">
+                  <CheckSquare className="w-4 h-4" />
                 </div>
-                <span>TodoApp</span>
+                <span className="text-sm font-bold tracking-tight">TodoApp</span>
+                <span className="hidden sm:inline-block text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-600 border border-zinc-200/60">
+                  Enterprise
+                </span>
               </NavLink>
 
-              <nav className="hidden sm:flex items-center gap-1">
+              <div className="h-4 w-px bg-zinc-200 hidden sm:block" />
+
+              <nav className="hidden sm:flex items-center gap-1.5">
                 <NavLink to="/" end className={navLinkClass}>
-                  <ListTodo className="w-4 h-4" />
-                  Todos
+                  <ListTodo className="w-3.5 h-3.5" />
+                  <span>Todos</span>
                 </NavLink>
 
                 {isAdmin && (
                   <NavLink to="/admin/users" className={navLinkClass}>
-                    <Users className="w-4 h-4" />
-                    Kelola User
+                    <Users className="w-3.5 h-3.5" />
+                    <span>Kelola User</span>
                   </NavLink>
                 )}
               </nav>
             </div>
 
-            {/* User Profile & Logout */}
+            {/* User Profile & Actions */}
             <div className="flex items-center gap-3">
               {user && (
-                <div className="hidden sm:flex flex-col items-end text-right">
-                  <span className="text-sm font-medium text-gray-900 leading-tight">
-                    {user.fullName || user.email}
-                  </span>
-                  <div className="flex items-center gap-1 mt-0.5">
-                    {user.roles?.map((role) => (
-                      <span
-                        key={role}
-                        className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                          role === 'Admin'
-                            ? 'bg-purple-100 text-purple-700'
-                            : 'bg-blue-100 text-blue-700'
-                        }`}
-                      >
-                        {role}
-                      </span>
-                    ))}
+                <div className="flex items-center gap-2.5 pl-2">
+                  <div className="w-7 h-7 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-800 font-mono text-[11px] font-semibold flex items-center justify-center shrink-0">
+                    {userInitials}
+                  </div>
+                  <div className="hidden md:flex flex-col text-left">
+                    <span className="text-xs font-semibold text-zinc-900 leading-tight">
+                      {user.fullName || user.email}
+                    </span>
+                    <div className="flex items-center gap-1 mt-0.5">
+                      {user.roles?.map((role) => (
+                        <Badge
+                          key={role}
+                          size="sm"
+                          variant={role === 'Admin' ? 'purple' : 'secondary'}
+                          showDot={role === 'Admin'}
+                        >
+                          {role}
+                        </Badge>
+                      ))}
+                    </div>
                   </div>
                 </div>
               )}
@@ -80,10 +101,10 @@ export const AppLayout: React.FC = () => {
                 variant="secondary"
                 size="sm"
                 onClick={handleLogout}
-                className="gap-1.5 text-gray-600 hover:text-red-600 hover:border-red-200"
+                className="gap-1.5 text-zinc-600 hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50/50 text-xs"
                 title="Logout"
               >
-                <LogOut className="w-4 h-4" />
+                <LogOut className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Keluar</span>
               </Button>
             </div>
@@ -91,32 +112,40 @@ export const AppLayout: React.FC = () => {
         </div>
 
         {/* Mobile Navigation Bar */}
-        <div className="sm:hidden border-t border-gray-100 px-4 py-2 flex items-center gap-2 bg-gray-50">
+        <div className="sm:hidden border-t border-zinc-100 px-4 py-2 flex items-center gap-2 bg-zinc-50/70">
           <NavLink to="/" end className={navLinkClass}>
-            <ListTodo className="w-4 h-4" />
-            Todos
+            <ListTodo className="w-3.5 h-3.5" />
+            <span>Todos</span>
           </NavLink>
           {isAdmin && (
             <NavLink to="/admin/users" className={navLinkClass}>
-              <Users className="w-4 h-4" />
-              Kelola User
+              <Users className="w-3.5 h-3.5" />
+              <span>Kelola User</span>
             </NavLink>
           )}
         </div>
       </header>
 
       {/* Main Page Content */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Outlet />
       </main>
 
-      {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 py-4 text-center text-xs text-gray-500">
-        &copy; {new Date().getFullYear()} TodoApp &bull; Clean Architecture .NET 8 & React
+      {/* Modern Minimalist Footer */}
+      <footer className="bg-white border-t border-zinc-200/80 py-4 text-center text-xs text-zinc-500">
+        <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-zinc-700">TodoApp</span>
+            <span className="text-zinc-300">&bull;</span>
+            <span className="text-zinc-500">Enterprise Edition</span>
+          </div>
+          <p className="text-zinc-400">
+            &copy; {new Date().getFullYear()} Clean Architecture .NET 8 &bull; React &bull; Tailwind CSS
+          </p>
+        </div>
       </footer>
     </div>
   );
 };
 
 export default AppLayout;
-

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { PlusCircle, Calendar, AlertTriangle } from 'lucide-react';
+import { Plus, Calendar, AlertTriangle } from 'lucide-react';
 import { useCreateTodo } from '../hooks/useTodos';
 import { Card } from '../../../components/ui/Card';
 import { Button } from '../../../components/ui/Button';
-import { Input } from '../../../components/ui/Input';
 import type { TodoPriority } from '../../../types/todo';
 
 export const TodoForm: React.FC = () => {
@@ -11,6 +10,7 @@ export const TodoForm: React.FC = () => {
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState<TodoPriority>('Medium');
   const [dueDate, setDueDate] = useState('');
+  const [isExpanded, setIsExpanded] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const createMutation = useCreateTodo();
@@ -35,99 +35,123 @@ export const TodoForm: React.FC = () => {
       setDescription('');
       setPriority('Medium');
       setDueDate('');
+      setIsExpanded(false);
     } catch {
       setError('Gagal menambahkan todo. Silakan coba lagi.');
     }
   };
 
   return (
-    <Card className="border-blue-100 shadow-sm hover:shadow-md transition-shadow">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex items-center gap-2 border-b pb-3">
-          <PlusCircle className="w-5 h-5 text-blue-600" />
-          <h3 className="font-semibold text-gray-900">Tambah Tugas Baru</h3>
-        </div>
-
+    <Card className="border border-zinc-200/90 shadow-xs bg-white rounded-lg p-4 transition-all">
+      <form onSubmit={handleSubmit} className="space-y-3">
         {error && (
-          <div className="p-2.5 bg-red-50 border border-red-200 rounded-lg text-xs text-red-600 flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 shrink-0" />
+          <div className="p-2.5 bg-rose-50 border border-rose-200/80 rounded-md text-xs text-rose-700 flex items-center gap-2">
+            <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
-        <Input
-          placeholder="Apa yang ingin Anda selesaikan hari ini?"
-          value={title}
-          onChange={(e) => {
-            setTitle(e.target.value);
-            if (error) setError(null);
-          }}
-          disabled={createMutation.isPending}
-        />
-
-        <div className="space-y-1">
-          <label className="block text-xs font-medium text-gray-600">
-            Deskripsi (Opsional)
-          </label>
-          <textarea
-            rows={2}
-            className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors placeholder-gray-400"
-            placeholder="Tambahkan catatan detail tugas jika diperlukan..."
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+        {/* Quick entry title line */}
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            placeholder="Tambah tugas baru... (e.g. Audit security logs backend)"
+            value={title}
+            onFocus={() => setIsExpanded(true)}
+            onChange={(e) => {
+              setTitle(e.target.value);
+              if (error) setError(null);
+            }}
             disabled={createMutation.isPending}
+            className="w-full text-sm font-medium text-zinc-900 placeholder:text-zinc-400 bg-transparent px-2.5 py-1.5 rounded-md border border-zinc-200/80 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 transition-colors focus:outline-none"
           />
-        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {/* Priority selector */}
-          <div className="space-y-1">
-            <label className="block text-xs font-medium text-gray-600">
-              Prioritas
-            </label>
-            <select
-              value={priority}
-              onChange={(e) => setPriority(e.target.value as TodoPriority)}
-              disabled={createMutation.isPending}
-              className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          {!isExpanded && (
+            <Button
+              type="submit"
+              variant="primary"
+              size="sm"
+              isLoading={createMutation.isPending}
+              className="shrink-0 gap-1"
             >
-              <option value="Low">Low (Rendah)</option>
-              <option value="Medium">Medium (Sedang)</option>
-              <option value="High">High (Tinggi)</option>
-            </select>
-          </div>
-
-          {/* Due date picker */}
-          <div className="space-y-1">
-            <label className="block text-xs font-medium text-gray-600 flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5" />
-              Tenggat Waktu (Opsional)
-            </label>
-            <input
-              type="date"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-              disabled={createMutation.isPending}
-              className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
+              <Plus className="w-3.5 h-3.5" />
+              <span>Tambah</span>
+            </Button>
+          )}
         </div>
 
-        <div className="flex justify-end pt-1">
-          <Button
-            type="submit"
-            variant="primary"
-            isLoading={createMutation.isPending}
-            className="gap-2 text-sm px-5"
-          >
-            <PlusCircle className="w-4 h-4" />
-            Simpan Tugas
-          </Button>
-        </div>
+        {/* Expandable details */}
+        {isExpanded && (
+          <div className="space-y-3 pt-2 border-t border-zinc-100 animate-in fade-in duration-100">
+            <div>
+              <textarea
+                rows={2}
+                className="w-full px-2.5 py-1.5 text-xs text-zinc-900 rounded-md border border-zinc-200/80 focus:outline-none focus:ring-1 focus:ring-zinc-900 focus:border-zinc-900 transition-colors placeholder-zinc-400"
+                placeholder="Tambahkan detail atau catatan tugas (opsional)..."
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                disabled={createMutation.isPending}
+              />
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+              <div className="flex flex-wrap items-center gap-2">
+                {/* Priority Selector */}
+                <div className="flex items-center gap-1">
+                  <span className="text-[11px] font-medium text-zinc-500">Prioritas:</span>
+                  <select
+                    value={priority}
+                    onChange={(e) => setPriority(e.target.value as TodoPriority)}
+                    disabled={createMutation.isPending}
+                    className="text-xs font-medium border border-zinc-200/90 rounded-md px-2 py-1 bg-white text-zinc-800 focus:outline-none focus:ring-1 focus:ring-zinc-900 cursor-pointer"
+                  >
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                  </select>
+                </div>
+
+                {/* Due Date Picker */}
+                <div className="flex items-center gap-1">
+                  <Calendar className="w-3 h-3 text-zinc-400" />
+                  <input
+                    type="date"
+                    value={dueDate}
+                    onChange={(e) => setDueDate(e.target.value)}
+                    disabled={createMutation.isPending}
+                    className="text-xs font-medium border border-zinc-200/90 rounded-md px-2 py-1 bg-white text-zinc-700 focus:outline-none focus:ring-1 focus:ring-zinc-900 cursor-pointer"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 ml-auto">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="xs"
+                  onClick={() => setIsExpanded(false)}
+                  disabled={createMutation.isPending}
+                  className="text-zinc-500 text-xs"
+                >
+                  Batal
+                </Button>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="xs"
+                  isLoading={createMutation.isPending}
+                  className="gap-1 px-3"
+                >
+                  <Plus className="w-3 h-3" />
+                  <span>Simpan Tugas</span>
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
       </form>
     </Card>
   );
 };
 
 export default TodoForm;
-

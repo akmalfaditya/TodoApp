@@ -69,19 +69,18 @@ export const TodoList: React.FC<TodoListProps> = ({ onEdit }) => {
   // Loading Skeleton State
   if (isLoading) {
     return (
-      <div className="space-y-3">
+      <div className="space-y-2">
         {[1, 2, 3].map((n) => (
           <div
             key={n}
-            className="p-4 rounded-xl border border-gray-200 bg-white animate-pulse space-y-3"
+            className="p-3.5 rounded-lg border border-zinc-200/80 bg-white animate-pulse space-y-2.5"
           >
             <div className="flex items-center gap-3">
-              <div className="w-5 h-5 bg-gray-200 rounded" />
-              <div className="h-4 bg-gray-200 rounded w-1/3" />
-              <div className="h-4 bg-gray-100 rounded w-16" />
+              <div className="w-4.5 h-4.5 bg-zinc-200 rounded" />
+              <div className="h-3.5 bg-zinc-200 rounded w-1/3" />
+              <div className="h-3.5 bg-zinc-100 rounded w-16" />
             </div>
-            <div className="h-3 bg-gray-100 rounded w-2/3 ml-8" />
-            <div className="h-3 bg-gray-100 rounded w-24 ml-8" />
+            <div className="h-3 bg-zinc-100 rounded w-2/3 ml-7.5" />
           </div>
         ))}
       </div>
@@ -91,15 +90,15 @@ export const TodoList: React.FC<TodoListProps> = ({ onEdit }) => {
   // Error State with Retry Button
   if (isError) {
     return (
-      <div className="p-8 rounded-2xl border border-red-200 bg-red-50 text-center space-y-4">
-        <div className="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto">
-          <AlertCircle className="w-6 h-6" />
+      <div className="p-6 rounded-lg border border-rose-200/80 bg-rose-50/50 text-center space-y-3">
+        <div className="w-10 h-10 bg-rose-100 text-rose-600 rounded-md flex items-center justify-center mx-auto">
+          <AlertCircle className="w-5 h-5" />
         </div>
         <div className="space-y-1">
-          <h4 className="text-base font-semibold text-red-900">
+          <h4 className="text-sm font-semibold text-rose-900">
             Gagal Memuat Daftar Tugas
           </h4>
-          <p className="text-sm text-red-600 max-w-md mx-auto">
+          <p className="text-xs text-rose-600 max-w-md mx-auto">
             {error instanceof Error
               ? error.message
               : 'Terjadi gangguan saat mengambil data dari server backend.'}
@@ -109,9 +108,9 @@ export const TodoList: React.FC<TodoListProps> = ({ onEdit }) => {
           variant="secondary"
           size="sm"
           onClick={() => refetch()}
-          className="gap-2 mx-auto text-red-700 hover:text-red-900 border-red-200"
+          className="gap-1.5 mx-auto text-rose-700 hover:text-rose-900 border-rose-200 hover:bg-rose-50"
         >
-          <RefreshCw className="w-4 h-4" />
+          <RefreshCw className="w-3.5 h-3.5" />
           Coba Lagi
         </Button>
       </div>
@@ -121,12 +120,12 @@ export const TodoList: React.FC<TodoListProps> = ({ onEdit }) => {
   // Empty State (No todos in database)
   if (!todos || todos.length === 0) {
     return (
-      <div className="p-12 rounded-2xl border-2 border-dashed border-gray-200 bg-white text-center space-y-3">
-        <div className="w-12 h-12 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mx-auto">
-          <ClipboardList className="w-6 h-6" />
+      <div className="p-10 rounded-lg border border-dashed border-zinc-300 bg-white text-center space-y-2.5">
+        <div className="w-10 h-10 bg-zinc-100 text-zinc-500 rounded-md flex items-center justify-center mx-auto border border-zinc-200/60">
+          <ClipboardList className="w-5 h-5" />
         </div>
-        <h4 className="text-base font-semibold text-gray-800">Belum ada tugas</h4>
-        <p className="text-sm text-gray-500 max-w-sm mx-auto">
+        <h4 className="text-sm font-semibold text-zinc-900">Belum ada tugas</h4>
+        <p className="text-xs text-zinc-500 max-w-xs mx-auto">
           Tambahkan tugas pertama Anda melalui formulir di atas untuk mulai produktif!
         </p>
       </div>
@@ -136,14 +135,14 @@ export const TodoList: React.FC<TodoListProps> = ({ onEdit }) => {
   // Filter Empty State (Todos exist, but none match current filter/search)
   if (processedTodos.length === 0) {
     return (
-      <div className="p-12 rounded-2xl border border-gray-200 bg-white text-center space-y-3">
-        <div className="w-12 h-12 bg-gray-100 text-gray-500 rounded-full flex items-center justify-center mx-auto">
-          <CheckCircle2 className="w-6 h-6" />
+      <div className="p-8 rounded-lg border border-zinc-200/80 bg-white text-center space-y-2">
+        <div className="w-9 h-9 bg-zinc-100 text-zinc-400 rounded-md flex items-center justify-center mx-auto">
+          <CheckCircle2 className="w-4 h-4" />
         </div>
-        <h4 className="text-base font-semibold text-gray-800">
+        <h4 className="text-sm font-semibold text-zinc-800">
           Tidak ada tugas yang cocok
         </h4>
-        <p className="text-sm text-gray-500 max-w-sm mx-auto">
+        <p className="text-xs text-zinc-500 max-w-xs mx-auto">
           Tidak ada tugas yang memenuhi kriteria filter atau pencarian Anda saat ini.
         </p>
       </div>
@@ -151,7 +150,7 @@ export const TodoList: React.FC<TodoListProps> = ({ onEdit }) => {
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       {processedTodos.map((todo) => (
         <TodoItem key={todo.id} todo={todo} onEdit={onEdit} />
       ))}

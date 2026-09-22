@@ -66,27 +66,27 @@ export const TodoEditModal: React.FC<TodoEditModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in">
-      <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-gray-100 space-y-4">
-        <div className="flex items-center justify-between border-b pb-3">
-          <h3 className="text-lg font-bold text-gray-900">Edit Tugas</h3>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/40 backdrop-blur-xs animate-in fade-in duration-150">
+      <div className="bg-white rounded-lg max-w-lg w-full p-5 shadow-dropdown border border-zinc-200/90 space-y-4">
+        <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
+          <h3 className="text-base font-semibold text-zinc-900">Edit Tugas</h3>
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+            className="p-1 rounded-md text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 transition-colors cursor-pointer"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {error && (
-          <div className="p-2.5 bg-red-50 border border-red-200 rounded-lg text-xs text-red-600 flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 shrink-0" />
+          <div className="p-2.5 bg-rose-50 border border-rose-200/80 rounded-md text-xs text-rose-700 flex items-center gap-2">
+            <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3.5">
           <Input
             label="Judul Tugas"
             value={title}
@@ -95,12 +95,12 @@ export const TodoEditModal: React.FC<TodoEditModalProps> = ({
           />
 
           <div className="space-y-1">
-            <label className="block text-xs font-medium text-gray-600">
+            <label className="block text-xs font-medium text-zinc-700">
               Deskripsi
             </label>
             <textarea
               rows={3}
-              className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              className="w-full px-3 py-2 text-xs rounded-md border border-zinc-200/90 text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-900 focus:border-zinc-900 transition-colors placeholder-zinc-400"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               disabled={updateMutation.isPending}
@@ -109,14 +109,14 @@ export const TodoEditModal: React.FC<TodoEditModalProps> = ({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1">
-              <label className="block text-xs font-medium text-gray-600">
+              <label className="block text-xs font-medium text-zinc-700">
                 Prioritas
               </label>
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as TodoPriority)}
                 disabled={updateMutation.isPending}
-                className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2.5 py-1.5 text-xs font-medium rounded-md border border-zinc-200/90 bg-white text-zinc-800 focus:outline-none focus:ring-1 focus:ring-zinc-900 cursor-pointer"
               >
                 <option value="Low">Low (Rendah)</option>
                 <option value="Medium">Medium (Sedang)</option>
@@ -125,7 +125,7 @@ export const TodoEditModal: React.FC<TodoEditModalProps> = ({
             </div>
 
             <div className="space-y-1">
-              <label className="block text-xs font-medium text-gray-600">
+              <label className="block text-xs font-medium text-zinc-700">
                 Tenggat Waktu
               </label>
               <input
@@ -133,7 +133,7 @@ export const TodoEditModal: React.FC<TodoEditModalProps> = ({
                 value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
                 disabled={updateMutation.isPending}
-                className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-2.5 py-1.5 text-xs font-medium rounded-md border border-zinc-200/90 bg-white text-zinc-800 focus:outline-none focus:ring-1 focus:ring-zinc-900 cursor-pointer"
               />
             </div>
           </div>
@@ -144,17 +144,17 @@ export const TodoEditModal: React.FC<TodoEditModalProps> = ({
               id="edit-is-completed"
               checked={isCompleted}
               onChange={(e) => setIsCompleted(e.target.checked)}
-              className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+              className="w-4 h-4 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900 cursor-pointer"
             />
             <label
               htmlFor="edit-is-completed"
-              className="text-sm font-medium text-gray-700 cursor-pointer"
+              className="text-xs font-medium text-zinc-700 cursor-pointer"
             >
               Tandai tugas ini telah selesai
             </label>
           </div>
 
-          <div className="flex justify-end gap-2 pt-3 border-t">
+          <div className="flex justify-end gap-2 pt-3 border-t border-zinc-100">
             <Button
               type="button"
               variant="secondary"
@@ -171,7 +171,7 @@ export const TodoEditModal: React.FC<TodoEditModalProps> = ({
               isLoading={updateMutation.isPending}
               className="gap-1.5"
             >
-              <Save className="w-4 h-4" />
+              <Save className="w-3.5 h-3.5" />
               Simpan Perubahan
             </Button>
           </div>
@@ -182,4 +182,3 @@ export const TodoEditModal: React.FC<TodoEditModalProps> = ({
 };
 
 export default TodoEditModal;
-
